@@ -1,0 +1,56 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" 
+        x:Class="testBorder.MainWindow"
+        Title="MainWindow" Height="350" Width="525" BorderThickness="10,0,0,0">
+	<Window.Resources>
+		
+		<Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+			
+            <!-- 为何这里将 {StaticResource ButtonNormalBackground} 改成Green会失效呢? 因为下面的controlTemplate 重新构造了视觉树么?-->
+			<!-- 原因为:顶层已经对Background进行了赋值 优先级 -->
+            <!--因为WPF每访问一个依赖属性，它都会按照下面的顺序由高到底处理该值。具体优先级如下图所示：
+            
+            -->
+            <Setter Property="Background" Value="Red"/>
+			
+			
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<!-- Themes:ButtonChrom 理解为默认的button装饰器 -->
+                        <!--
+                        <Themes:ButtonChrome x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" RenderDefaulted="{TemplateBinding IsDefaulted}" SnapsToDevicePixels="true">
+							<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Themes:ButtonChrome>
+                        -->
+                        <!-- 我们用border 替换默认的buttonchrome-->
+                        <Border CornerRadius="9" x:Name="bd" BorderThickness="10,0,0,0" BorderBrush="White" Background="{TemplateBinding Background}">
+                        	<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+							    <!-- 为什么去掉targetName 就会失效呢?-->
+                                <!-- 如果 TargetType未设置，则这里的Property 必须设置为button or control.Background ..-->
+								<Setter TargetName="bd" Property="Button.Background" Value="White"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		
+	</Window.Resources>
+	<Grid>
+	    <!-- 采用资源字典中的样式 -->
+		<Button Style="{StaticResource ButtonStyleFromResource}" Content="Button" HorizontalAlignment="Left" Height="77.6" Margin="45,52.2,0,0" VerticalAlignment="Top" Width="147.2"/>
+        <!-- 采用本文件中的样式 -->
+        <Button Content="Button" HorizontalAlignment="Left" Height="92.8" Margin="233.867,37,0,0" VerticalAlignment="Top" Width="147.2"  BorderThickness="50,0,0,0" BorderBrush="Black" Style="{StaticResource ButtonStyle1}" Foreground="White"  />
+		
+		<Border Background="Black" Margin="130.8,134.8,135.6,74.4" BorderBrush="#FFD61919" BorderThickness="0,10,0,0">
+			 <!-- 采用本文件中的样式 -->
+            <Button Content="Button" HorizontalAlignment="Left" Height="92.8" Margin="35.467,0,0,0" VerticalAlignment="Top" Width="147.2" Background="#FF1C60DE" BorderThickness="50,0,0,0" BorderBrush="Black" Style="{StaticResource ButtonStyle1}" Foreground="White"  />
+		</Border>
+	</Grid>
+</Window>

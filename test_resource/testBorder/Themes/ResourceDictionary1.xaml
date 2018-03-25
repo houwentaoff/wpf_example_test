@@ -1,0 +1,36 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!-- Resource dictionary entries should be defined here. -->
+    <Style x:Key="ButtonStyleFromResource" TargetType="{x:Type Button}">
+			<!-- blend软件点击右边Resources标签 然后看到该文件名字样式右边的编辑按钮点击 就会在Design页面中显示当前元素 -->
+            <!-- 为何这里将 {StaticResource ButtonNormalBackground} 改成Green会失效呢? 因为下面的controlTemplate 重新构造了视觉树么?-->
+			<Setter Property="Background" Value="Blue"/>
+			
+			
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type Button}">
+						<!-- Themes:ButtonChrom 理解为默认的button装饰器 -->
+                        <!--
+                        <Themes:ButtonChrome x:Name="Chrome" BorderBrush="{TemplateBinding BorderBrush}" Background="{TemplateBinding Background}" RenderMouseOver="{TemplateBinding IsMouseOver}" RenderPressed="{TemplateBinding IsPressed}" RenderDefaulted="{TemplateBinding IsDefaulted}" SnapsToDevicePixels="true">
+							<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Themes:ButtonChrome>
+                        -->
+                        <!-- 我们用border 替换默认的buttonchrome-->
+                        <Border CornerRadius="9" x:Name="bd" BorderThickness="10,0,0,0" BorderBrush="White" Background="{TemplateBinding Background}">
+                        	<ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+							    <!-- 为什么去掉targetName 就会失效呢?-->
+                                <!-- 如果 TargetType未设置，则这里的Property 必须设置为button or control.Background ..-->
+								<Setter TargetName="bd" Property="Background" Value="Red"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		
+</ResourceDictionary>
