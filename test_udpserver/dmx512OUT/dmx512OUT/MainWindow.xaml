@@ -1,0 +1,8 @@
+﻿<Window x:Class="dmx512OUT.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       Title="512调试窗口" Height="350" Width="525">
+    <Grid>
+        <TextBlock x:Name="buffer" Text="{Binding Path=Buffer,Mode=TwoWay}" TextWrapping="Wrap"/>
+    </Grid>
+</Window>

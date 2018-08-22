@@ -23,6 +23,8 @@ namespace testBorder
         public MainWindow()
         {
             InitializeComponent();
+           
+
         }
     }
 }
