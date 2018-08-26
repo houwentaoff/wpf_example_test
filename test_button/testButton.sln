@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testButton", "testButton\testButton.csproj", "{5e41f7f5-843a-4ce5-bb7c-6b369d9de627}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E41F7F5-843A-4CE5-BB7C-6B369D9DE627}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E41F7F5-843A-4CE5-BB7C-6B369D9DE627}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E41F7F5-843A-4CE5-BB7C-6B369D9DE627}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E41F7F5-843A-4CE5-BB7C-6B369D9DE627}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

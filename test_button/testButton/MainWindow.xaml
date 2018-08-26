@@ -1,0 +1,25 @@
+﻿<Window x:Class="testButton.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Border Width="120" Height="50" CornerRadius="5" Background="#FF3A3A39" Margin="183.2,0,0,145.6">
+            <Button  Height="Auto"  Background="Black" Click="mater_Click" Style="{StaticResource CapButton}"  Foreground="White"  Width="Auto">
+                    <Grid Height="50" Width="120">
+                                     <TextBlock Text="12" Foreground="White" FontSize="8" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                                     <TextBlock Text="不正常的" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" ></TextBlock>
+                    </Grid>
+              </Button>
+         </Border>
+
+           <Border Width="120" Height="50" CornerRadius="5" Background="#FF3A3A39"   VerticalAlignment="Bottom" HorizontalAlignment="Left" BorderThickness="0" Margin="0,0,0,201.7">
+                             <!--这是个典型的数据模板和样式模板么?-->
+                             <Button BorderThickness="1" Background="Black" Style="{StaticResource CapButton}" Click="seq_Click" Foreground="White"  Height="Auto" Width="Auto" >
+                                <Grid Height="50" Width="120" >
+                                        <TextBlock Text="11" Foreground="White" FontSize="8" Margin="5,5,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                                        <TextBlock  Text="正常的"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" ></TextBlock>
+                                </Grid>
+                            </Button>
+          </Border>
+    </Grid>
+</Window>
