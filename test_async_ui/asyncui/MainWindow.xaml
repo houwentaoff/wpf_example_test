@@ -1,0 +1,9 @@
+﻿<Window x:Class="asyncui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+         <Button x:Name="btn"   Style="{StaticResource LightQuickButton}" Background="{x:Null}" Foreground="White">
+         </Button>
+    </Grid>
+</Window>
