@@ -1,0 +1,24 @@
+﻿<Window x:Class="TestMenu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525" Foreground="White">
+      <Window.Resources>
+        <ContextMenu x:Key="MainMenu">
+            <MenuItem  Header="作用对象">
+        		<MenuItem PreviewMouseLeftButtonUp="childa_PreviewMouseLeftButtonUp" IsCheckable="True" Click="zhiding_Click" IsChecked="{Binding _Target}" Header="全部"/>
+        		<MenuItem IsCheckable="True" Click="zhiding_Click" IsChecked="{Binding _Target}" Header="奇数"/>
+            </MenuItem>
+        </ContextMenu>
+         </Window.Resources>
+    <Grid>
+       
+    	<Menu x:Name="fathera" HorizontalAlignment="Left" Height="100" Margin="114,136.2,0,0" VerticalAlignment="Top" Width="100">
+    	<MenuItem  IsChecked="False" x:Name="childa"  Header="11223344" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24"  Width="100" Checked="childa_Checked" PreviewMouseLeftButtonUp="childa_PreviewMouseLeftButtonUp" >
+    	</MenuItem>
+   	    <MenuItem x:Name="chirdb"  Header="5566778899" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24"  Width="100" IsChecked="True">
+    	</MenuItem>
+        </Menu>
+    	<Button ContextMenu="{StaticResource MainMenu}" Content="Button" HorizontalAlignment="Left" Margin="38.4,181.733,0,0" VerticalAlignment="Top" Width="75"/>
+        
+    </Grid>
+</Window>
