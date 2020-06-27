@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Permissions;
 using System.Text;
@@ -21,8 +22,29 @@ namespace test_progressbar
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void Notify(string propName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            }
+        }
+        private int percent = 0;
+        public int Percent
+        {
+            set
+            {
+                if (percent != value)
+                {
+                    percent = value;
+                    Notify("Percent");
+                }
+            }
+            get { return percent; }
+        }
         public MainWindow()
         {
             InitializeComponent();
@@ -90,8 +112,26 @@ namespace test_progressbar
                 Thread.Sleep(100);//do some work
             }
         }
+
+        private void Notify_Click(object sender, RoutedEventArgs e)
+        {
+            // 异步更新UI 多线程中建议使用这种方法进行UI界面的更新，
+            // wpf的UI线程只有一个，如果UI线程没有返回，则界面不能得到更新
+            // UI主线程也就是执行该Notify_Click的线程，比如这里要传送文件，
+            // 需要个过程才返回，则不会更新UI。这时如果需要更新UI要使用
+            // 上面2个例子中的System.Windows.Forms.Application.DoEvents();强制刷新所有UI
+            this.DataContext = this;
+            Task.Factory.StartNew(() =>
+            {
+                for (int i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(100);
+                    Percent = i/100;
+                }
+            });
+        }
     }
-    
+
     //The following example shows how to use a DispatcherFrame to achieve similar results as the Windows Forms DoEvents method. 
     public class UI
     {

@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-    	<ProgressBar x:Name="pb" HorizontalAlignment="Left" Height="10" Margin="173.2,111.2,0,0" VerticalAlignment="Top" Width="100"/>
+        <ProgressBar x:Name="pb"  Value="{Binding Path=Percent}" HorizontalAlignment="Left" Height="10" Margin="173.2,111.2,0,0" VerticalAlignment="Top" Width="100"/>
     	<Button x:Name="begin" Content="开始" HorizontalAlignment="Left" Margin="116.8,210.7,0,0" VerticalAlignment="Top" Width="75" Click="begin_Click"/>
     	<Button x:Name="begin2" Content="winform doevent开始" HorizontalAlignment="Left" Margin="256,210.7,0,0" VerticalAlignment="Top" Width="75" Click="begin2_Click"/>
     	<Button x:Name="begin3" Content="wpf doevent开始" HorizontalAlignment="Left" Margin="380,210.7,0,0" VerticalAlignment="Top" Width="75" Click="begin3_Click"/>
-        
+        <Button x:Name="notify" Content="绑定path后的Notify" HorizontalAlignment="Left" Margin="134.4,264,0,0" VerticalAlignment="Top" Width="138.8" Click="Notify_Click"/>
+
     </Grid>
 </Window>
