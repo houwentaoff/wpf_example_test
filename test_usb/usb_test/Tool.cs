@@ -1,15 +1,23 @@
-﻿using System;
+﻿using LibUsbDotNet;
+using LibUsbDotNet.DeviceNotify;
+using LibUsbDotNet.Main;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 namespace usb_test
 {
     public class Tool
     {
+        private const int vendor = 0x31EF;
+        private const int product_id = 0x3001;
+       
+        public static UsbDeviceFinder MyUsbFinder = new UsbDeviceFinder(vendor, product_id);
         private static Tool instance = null;
         public static Tool GetInstance()
         {
@@ -90,5 +98,65 @@ namespace usb_test
         }
         const int ROTPK_LENGTH = 524;
         const int HEAD_SIZE = 4096;
+        public static UsbDevice MyUsbDevice;
+        public bool GetUSBConnectState()
+        {
+            bool found = false;
+            try
+            {
+                // Find and open the usb device.
+                MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
+
+                // If the device is open and ready
+                if (MyUsbDevice == null) throw new Exception("Device Not Found.");
+                found = true;
+            }
+            catch (Exception ex)
+            {
+                found = false;
+
+            }
+            return found;
+        }
+     
+    }
+    class DLStateService
+    {
+        public static Tool tool = Tool.GetInstance();
+        public static IDeviceNotifier UsbDeviceNotifier = DeviceNotifier.OpenDeviceNotifier();
+        public static void TimerThread(object param)
+        {
+            bool connected = false;
+            connected = tool.GetUSBConnectState();
+            MainWindow.GetInstance().IsConnected = connected;
+            while (true)
+            {
+                Thread.Sleep(5000);
+#if xx
+                connected = tool.GetUSBConnectState();
+                if (connected != MainWindow.GetInstance().IsConnected)
+                {
+                    MainWindow.GetInstance().IsConnected = connected;
+                }
+#endif
+             }
+        }
+        private static void OnDeviceNotifyEvent(object sender, DeviceNotifyEventArgs e)
+        {
+            bool connected = false;
+            // A Device system-level event has occured
+            connected = tool.GetUSBConnectState();
+            if (connected != MainWindow.GetInstance().IsConnected)
+            {
+                MainWindow.GetInstance().IsConnected = connected;
+            }
+        }
+        public static void run()
+        {
+            UsbDeviceNotifier.OnDeviceNotify += OnDeviceNotifyEvent;
+            Thread playing = new Thread(new ParameterizedThreadStart(DLStateService.TimerThread));
+            playing.IsBackground = true;
+            playing.Start();
+        }
     }
  }

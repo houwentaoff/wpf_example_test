@@ -50,6 +50,35 @@ namespace usb_test
         public static UsbDevice MyUsbDevice;
         private Tool tool = Tool.GetInstance();
         private string debuginfo="";
+        public bool IsConnected
+        {
+            get
+            {
+                if (ConnectStat == "未连接")
+                    return false;
+                return true;
+            }
+            set
+            {
+                if (!value)
+                    ConnectStat = "未连接";
+                else
+                    ConnectStat = "已连接";
+            }
+        }
+        private string connect_stat = "未连接";
+        public string ConnectStat
+        {
+            get
+            {
+                return connect_stat;
+            }
+            set
+            {
+                connect_stat = value;
+                Notify("ConnectStat");
+            }
+        }
         public string DebugInfo
         {
             get
@@ -84,6 +113,7 @@ namespace usb_test
             InitializeComponent();
             this.DataContext = this;
             //pb.Visibility = Visibility.Hidden;
+            DLStateService.run();
         }
 
         private void send_file(string file_name)
