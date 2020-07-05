@@ -103,9 +103,9 @@ namespace usb_test
             }
             get { return percent; }
         }
-        string bootload_file = "E:\\jlq\\hci\\DDR_INIT_JA_310_1333.bin";
+        string bootload_file = "bootloader.bin";
         string tmp_blf = "bl.bin.tmp";
-        string bin_file = "E:\\jlq\\sv2020\\bin\\bin.bin";
+        string bin_file = "case.bin";
         string tmp_bin = "case.tmp";
         public MainWindow()
         {
@@ -312,21 +312,44 @@ namespace usb_test
         private void DownLoad_Click(object sender, RoutedEventArgs e)
         {
             Image_header header = new Image_header();
-            DebugInfo = "";
-            //download.IsEnabled = false;
-            UpdateProgressBar(0);
-            Task.Factory.StartNew(() =>
+            if (!IsConnected)
             {
-                gen_tmp(BinType.BOOTLOADER);
-                UpdateProgressBar(25);
-                gen_tmp(BinType.BIN);
-                UpdateProgressBar(50);
-                send_file(tmp_blf);
-                UpdateProgressBar(75);
-                Thread.Sleep(4000);
-                send_file(tmp_bin);
-                UpdateProgressBar(100);
-            });
+                MessageBox.Show("未检测到设备，不能进行下载!");
+                return;
+            }
+            DebugInfo = "";
+            try
+            {
+                //download.IsEnabled = false;
+                UpdateProgressBar(0);
+                Task.Factory.StartNew(() =>
+                {
+                    try
+                    {
+                        gen_tmp(BinType.BOOTLOADER);
+                        UpdateProgressBar(25);
+                        gen_tmp(BinType.BIN);
+                        UpdateProgressBar(50);
+                        send_file(tmp_blf);
+                        UpdateProgressBar(75);
+                        Thread.Sleep(4000);
+                        send_file(tmp_bin);
+                        UpdateProgressBar(100);
+                    }
+                    catch(Exception ex)
+                    {
+                        Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            pb.Visibility = Visibility.Hidden;
+                            download.IsEnabled = true;
+                        }));
+                        MessageBox.Show(ex.Message);
+                    }
+                });
+            }catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
