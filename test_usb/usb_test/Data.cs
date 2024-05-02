@@ -37,7 +37,15 @@ namespace usb_test
                 header_magic[i] = (byte)IMAGE_MAGIC[i];
             }
             header_len = IMAGE_HEADER_LENGTH;
-            header_version = IMAGE_HEADER_VERSION;
+            if (Tool.GetInstance().SocT == SocType.JA310)
+            {
+                header_version = 1;//IMAGE_HEADER_VERSION;
+            }
+            else if (Tool.GetInstance().SocT == SocType.JR510)
+            {
+                header_version = 3;//IMAGE_HEADER_VERSION;
+            }
+
             for (i = 0; i < 4; i++)
             {
                 image_id[i] = (byte)IMAGE_ID[i];

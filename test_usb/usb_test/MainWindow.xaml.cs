@@ -44,7 +44,7 @@ namespace usb_test
             return instance;
         }
 
-        private const int product_id = 0x3001;
+        private const int product_id = 0x5100;
         public static UsbDeviceFinder MyUsbFinder = new UsbDeviceFinder(vendor, product_id);
         #endregion
         public static UsbDevice MyUsbDevice;
@@ -107,6 +107,8 @@ namespace usb_test
         string tmp_blf = "bl.bin.tmp";
         string bin_file = "case.bin";
         string tmp_bin = "case.tmp";
+        string bin_path = "";
+        static public int block_size = 8192;
         public MainWindow()
         {
             instance = this;
@@ -119,9 +121,13 @@ namespace usb_test
         private void send_file(string file_name)
         {
             ErrorCode ec = ErrorCode.None;
+            long left = 0;
+            long flen = 0;
             try
             {
                 // Find and open the usb device.
+                UsbDeviceFinder MyUsbFinder = null;
+                MyUsbFinder = new UsbDeviceFinder(Tool.vendors[(int)(Tool.GetInstance().SocT)], Tool.product_ids[(int)(Tool.GetInstance().SocT)]);
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
 
                 // If the device is open and ready
@@ -150,17 +156,17 @@ namespace usb_test
                 // open write endpoint 1.
                 UsbEndpointWriter writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep08);
 
-                byte[] buf = new byte[4096];
-                long left = 0;
+                byte[] buf = new byte[block_size];
                 int size = 0;
                 int usb_send_size = 0;
                 int curpb = MainWindow.GetInstance().Percent;
                 FileStream fs = new FileStream(file_name, FileMode.Open);
                 left = fs.Length;
+                flen = fs.Length;
                 // percent 25%
                 while (left > 0)
                 {
-                    size = left > 4096 ? 4096 : (int)left;
+                    size = left > block_size ? block_size : (int)left;
                     fs.Read(buf, 0, size);
                     ec = writer.Write(buf, 0, size, 2000, out usb_send_size);
                     if (ec != ErrorCode.None)
@@ -173,16 +179,16 @@ namespace usb_test
                         fs.Close();
                         throw new Exception("usb_send_size:" + usb_send_size.ToString() +  " != size:" + size.ToString() + " " + UsbDevice.LastErrorString);
                     }
-                    left -= 4096;
+                    left -= block_size;
                     MainWindow.GetInstance().Percent = curpb + (int)(25 *(1.0 - left*1.0/fs.Length));
                 }
                 fs.Close();
             }
             catch (Exception ex)
             {
-                DebugInfo = "";
+                DebugInfo += "";
                 //Console.WriteLine();
-                DebugInfo = ((ec != ErrorCode.None ? ec + ":" : String.Empty) + ex.Message);
+                DebugInfo += ((ec != ErrorCode.None ? ec + ":" : String.Empty) + ex.Message);
                 //Console.WriteLine((ec != ErrorCode.None ? ec + ":" : String.Empty) + ex.Message);
             }
             finally
@@ -271,20 +277,43 @@ namespace usb_test
             switch (type)
             {
                 case BinType.BOOTLOADER:
-                    header.dest_addr = 0xf8000000;
+                    if (platformx == "JA310")
+                    {
+                        header.dest_addr = 0xf8000000;
+                    }
+                    else if (platformx == "JR510")
+                    {
+                        header.dest_addr = 0x33000000;
+
+                    }
                     break;
                 case BinType.BIN:
-                    header.dest_addr = 0x0;
+                    if (platformx == "JA310")
+                    {
+                        header.dest_addr = 0x0;
+                    }
+                    else if (platformx == "JR510")
+                    {
+                        header.dest_addr = 0x80200000;
+                    }
                     break;
                 default:
                     throw new Exception("BinType err\n");
             }
             if (type == BinType.BOOTLOADER)
             {
+                bootload_file = "bootloader.bin";
+                bootload_file = platformx + "\\" + bootload_file;
                 tool.BuildPackage(header, bootload_file, tmp_blf);
             }
-            if (type == BinType.BIN)
+            else if (type == BinType.BIN)
             {
+                bin_file = "case.bin";
+                bin_file = platformx + "\\" + bin_file;
+                if (bin_path != "")
+                {
+                    bin_file = bin_path;
+                }
                 tool.BuildPackage(header, bin_file, tmp_bin);
             }
         }
@@ -326,13 +355,24 @@ namespace usb_test
                 {
                     try
                     {
+                        DebugInfo += "generate bl1...\n";
                         gen_tmp(BinType.BOOTLOADER);
                         UpdateProgressBar(25);
+                        DebugInfo += "generate bin...\n";
                         gen_tmp(BinType.BIN);
                         UpdateProgressBar(50);
+                        DebugInfo += "send bl1...\n";
                         send_file(tmp_blf);
                         UpdateProgressBar(75);
-                        Thread.Sleep(4000);
+                        if (Tool.GetInstance().SocT == SocType.JR510)
+                        {
+                            Thread.Sleep(5000);
+                        }
+                        else if (Tool.GetInstance().SocT == SocType.JA310)
+                        {
+                            Thread.Sleep(4000);
+                        }
+                        DebugInfo += "send bin...\n";
                         send_file(tmp_bin);
                         UpdateProgressBar(100);
                     }
@@ -350,6 +390,73 @@ namespace usb_test
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+        private void platform_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            // TODO: Add event handler implementation here.
+        }
+        List<string> platFormL = new List<string> { "JA310", "JR510"};
+        string platformx = "JA310";
+        public ObservableCollection<string> PlatFormL
+        {
+            get
+            {
+                ObservableCollection<string> l = new ObservableCollection<string>();
+                foreach (var v in platFormL)
+                {
+                    l.Add(v);
+                }
+                return l;
+            }
+        }
+        public List<string> PlatFormL1
+        {
+            get
+            {
+                return platFormL;
+            }
+        }
+        public string ChoicePlatForm
+        {
+            get
+            {
+                if (platformx == null)
+                {
+                    platformx = "";
+                }
+                return platformx;
+            }
+            set
+            {
+                platformx = value;
+                Notify("ChoicePlatForm");
+
+                bool connected = false;
+                connected = tool.GetUSBConnectState();
+                MainWindow.GetInstance().IsConnected = connected;
+            }
+        }
+
+        private void importBin_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog m_Dialog = new System.Windows.Forms.FolderBrowserDialog();
+            if (bin_path != "")
+            {
+                m_Dialog.SelectedPath = System.IO.Path.GetDirectoryName(bin_path); ; //Env.GetRootPath();
+            }
+            else
+            {
+                m_Dialog.SelectedPath = "E:\\jlq\\code\\xslt\\bin"; //Env.GetRootPath();
+            }
+            System.Windows.Forms.DialogResult result = m_Dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                return;
+            }
+            string m_Dir = m_Dialog.SelectedPath.Trim();
+            bin_path = m_Dir + "\\case.bin";
+            DebugInfo += m_Dir;
         }
     }
 }

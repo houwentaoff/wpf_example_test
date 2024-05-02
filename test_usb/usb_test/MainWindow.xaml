@@ -12,6 +12,7 @@
         <Button x:Name="download" Content="下载" Margin="718.6,328.187,0,0" Click="DownLoad_Click" VerticalAlignment="Top"/>
         <ProgressBar x:Name="pb" Value="{Binding Path=Percent}" Visibility="Hidden" HorizontalAlignment="Center" Height="10" Margin="0" VerticalAlignment="Center" Width="253.2"/>
         <TextBlock x:Name="ConnectStat_tb" HorizontalAlignment="Left" Margin="718.6,0,0,0" TextWrapping="Wrap" Text="{Binding Path=ConnectStat}" VerticalAlignment="Top" Width="69.037" Height="19.177"/>
-
+        <ComboBox IsEnabled="True" MaxDropDownHeight="Auto" x:Name="platform" ItemsSource="{Binding PlatFormL}" SelectedItem="{Binding ChoicePlatForm, Mode=TwoWay}"   MouseEnter="platform_MouseEnter" Margin="718.6,68,0,0" VerticalAlignment="top"/>
+        <Button x:Name="importPATH"  Content="选择bin路径"  Click="importBin_Click" Margin="718.6,169.2,0,169.2"/>
     </Grid>
 </Window>

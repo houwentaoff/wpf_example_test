@@ -12,12 +12,24 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace usb_test
 {
+    public enum SocType
+    {
+        JA310,
+        JR510,
+    }
     public class Tool
     {
-        private const int vendor = 0x31EF;
-        private const int product_id = 0x3001;
-       
-        public static UsbDeviceFinder MyUsbFinder = new UsbDeviceFinder(vendor, product_id);
+        public static int[] vendors = { 0x31EF, 0x31ef};
+        public static int[] product_ids = { 0x3001, 0x5100};
+
+        private static SocType type = SocType.JA310;
+        public SocType SocT
+        {
+            get
+            {
+                return type;
+            }
+        }
         private static Tool instance = null;
         public static Tool GetInstance()
         {
@@ -66,7 +78,25 @@ namespace usb_test
             int left = (int)fs.Length;
             int file_size = (int)fs.Length;
             int size = 0;
+            /* header(64B) + imagedata */
             byte[] sha256 = new byte[header.Size + left];
+
+            /*
+             *    JA310
+             * 0  --header    --   64B
+             *    --ROTPK     --   524B 公钥
+             *    --Signature --   256B(header + imagedata)
+             * 4K --Padding   -- 
+             * --Image Data-- 
+             * 
+             *    JR510
+             * 0  --header    --   64B
+             *    --ROTPK     --   524B 公钥
+             *    --Signature --   256B(header + imagedata)
+             *    --Hash      --   32B(header + imagedata)
+             * 4K --Padding   -- 
+             * --Image Data-- 
+             */
 
             Array.Copy(image_head_bytes, 0, sha256, 0, header.Size);
             while (left > 0)
@@ -78,25 +108,34 @@ namespace usb_test
             fs.Close();
             SHA256Managed Sha256 = new SHA256Managed();
             byte[] sha256hash = Sha256.ComputeHash(sha256);
-            byte[] head = new byte[4096];
-            Array.Clear(head, 0, 4096);
+            byte[] head = new byte[HEAD_SIZE];
+            Array.Clear(head, 0, HEAD_SIZE);
             Array.Copy(image_head_bytes, 0, head, 0, header.Size);
-            Array.Copy(sha256hash, 0, head, head_hash_len+ ROTPK_LENGTH, 32);
+            switch (type)
+            {
+                case SocType.JA310:
+                    Array.Copy(sha256hash, 0, head, header.Size + ROTPK_LENGTH, 32);
+                    break;
+                case SocType.JR510:
+                    Array.Copy(sha256hash, 0, head, header.Size + ROTPK_LENGTH + SIGNATURE_LENGTH, 32);
+                    break;
+            }
 
             /*
              * 头写入文件
              */
-            FileStream outfs = new FileStream(tmppath, FileMode.OpenOrCreate);
+            FileStream outfs = new FileStream(tmppath, FileMode.Create);
             outfs.Write(head, 0, HEAD_SIZE);
             /* 
              * 文件内容写入 tmppath
              */
-            outfs.Write(sha256, header.Size, file_size);
+            outfs.Write(sha256/**/, header.Size, file_size);
             outfs.Close();
 
             return ret;
         }
         const int ROTPK_LENGTH = 524;
+        const int SIGNATURE_LENGTH = 256;
         const int HEAD_SIZE = 4096;
         public static UsbDevice MyUsbDevice;
         public bool GetUSBConnectState()
@@ -104,6 +143,16 @@ namespace usb_test
             bool found = false;
             try
             {
+                if (MainWindow.GetInstance().ChoicePlatForm == "JA310")
+                {
+                    type = SocType.JA310;
+                }
+                if (MainWindow.GetInstance().ChoicePlatForm == "JR510")
+                {
+                    type = SocType.JR510;
+                }
+                UsbDeviceFinder MyUsbFinder = new UsbDeviceFinder(vendors[(int)(type)], product_ids[(int)(type)]);
+
                 // Find and open the usb device.
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
 
