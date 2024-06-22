@@ -305,6 +305,7 @@ namespace usb_test
                 bootload_file = "bootloader.bin";
                 bootload_file = platformx + "\\" + bootload_file;
                 tool.BuildPackage(header, bootload_file, tmp_blf);
+                DebugInfo += "ref " + bootload_file + "\n";
             }
             else if (type == BinType.BIN)
             {
@@ -315,6 +316,7 @@ namespace usb_test
                     bin_file = bin_path;
                 }
                 tool.BuildPackage(header, bin_file, tmp_bin);
+                DebugInfo += "ref "+ bin_file + "\n";
             }
         }
         public void UpdateProgressBar(int value)
