@@ -1,2 +1,6 @@
 obj
 bin
+/.vs/ProjectSettings.json
+/.vs/slnx.sqlite
+/.vs/wpf_test_example/v15/.suo
+/.vs/VSWorkspaceState.json

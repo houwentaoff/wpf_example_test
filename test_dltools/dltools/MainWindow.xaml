@@ -8,22 +8,16 @@
         Title="DL tools - 0.1" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="55*"/>
-            <ColumnDefinition Width="739*"/>
+            <ColumnDefinition Width="61*"/>
+            <ColumnDefinition Width="731*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="347*"/>
-            <RowDefinition Height="73*"/>
+            <RowDefinition Height="98*"/>
+            <RowDefinition Height="244*"/>
+            <RowDefinition Height="77*"/>
         </Grid.RowDefinitions>
         <ComboBox HorizontalAlignment="Left" Margin="529.843,29.5,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1" Height="21.24"/>
-        <ListView HorizontalAlignment="Left" Height="200.36" Margin="386,116.44,0,0" VerticalAlignment="Top" Width="42.4" Grid.Column="1">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <RichTextBox HorizontalAlignment="Left" Height="200.36" Margin="441.843,116.44,0,0" VerticalAlignment="Top" Width="259.6" Grid.Column="1">
+        <RichTextBox HorizontalAlignment="Left" Margin="416.733,22.253,0,0" Width="304.267" Grid.Column="1" Grid.Row="1">
             <FlowDocument>
                 <Paragraph>
                     <Run Text="debug log"/>
@@ -31,22 +25,21 @@
             </FlowDocument>
         </RichTextBox>
         <ComboBox HorizontalAlignment="Left" Margin="0.424,30,0,0" VerticalAlignment="Top" Width="353.6" Height="21.24" Grid.Column="1"/>
-        <Viewbox HorizontalAlignment="Left" Height="72.8" Margin="2.893,160.8,0,0" VerticalAlignment="Top" Width="83.2" Grid.ColumnSpan="2"/>
+        <Viewbox HorizontalAlignment="Left" Height="72.8" Margin="2.893,74.8,0,0" VerticalAlignment="Top" Width="83.2" Grid.ColumnSpan="2" Grid.Row="1"/>
         <Label Content="bl2" HorizontalAlignment="Left" Margin="0.505,30,0,0" VerticalAlignment="Top" Width="51.893" Height="25.24"/>
         <Label Content="COM" HorizontalAlignment="Left" Margin="479.2,30,0,0" VerticalAlignment="Top" Height="32.44" Grid.Column="1" Width="45.643"/>
-        <DataGrid HorizontalAlignment="Left" Height="172.36" Margin="10,144.44,0,0" VerticalAlignment="Top" Width="421.307" Grid.ColumnSpan="2"/>
-        <ProgressBar HorizontalAlignment="Left" Height="24.94" Margin="0,2.83,0,0" VerticalAlignment="Top" Width="326.5" Grid.Row="1" Grid.Column="1"/>
-        <TextBlock Margin="10,35.084,626.679,11.389" TextWrapping="Wrap" Text="1MB/s" Grid.Row="1" Grid.Column="1"/>
-        <Button Content="Download" HorizontalAlignment="Left" Margin="577.243,2.83,0,0" VerticalAlignment="Top" Width="96.6" Height="44.44" Grid.Column="1" Grid.Row="1"/>
-        <ScrollViewer HorizontalAlignment="Left" Height="184" Margin="356.8,132.8,0,0" VerticalAlignment="Top" Width="24.2" Grid.Column="1"/>
+        <DataGrid HorizontalAlignment="Left" Margin="10,35.44,0,0" Width="433.307" Grid.ColumnSpan="2" Grid.Row="1"/>
+        <ProgressBar HorizontalAlignment="Left" Height="24.94" Margin="10,10,0,0" VerticalAlignment="Top" Width="326.5" Grid.Row="2" Grid.Column="1"/>
+        <TextBlock Margin="19,42.253,617.679,0" TextWrapping="Wrap" Text="1MB/s" Grid.Row="2" Grid.Column="1"/>
+        <Button Content="Download" HorizontalAlignment="Left" Margin="572.243,10,0,0" VerticalAlignment="Top" Width="96.6" Height="44.44" Grid.Column="1" Grid.Row="2"/>
         <Button Content="select bl2(*.bl2)" HorizontalAlignment="Left" Margin="365.5,31.5,0,0" VerticalAlignment="Top" Width="96.6" Grid.Column="1" Height="19.24"/>
-        <TextBlock HorizontalAlignment="Left" Margin="0.424,77.6,0,0" TextWrapping="Wrap" Text="chip id：xx xxx" VerticalAlignment="Top" Height="42.84" Width="307.013" Grid.Column="1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="0.424,77.6,0,0" TextWrapping="Wrap" Text="chip id：xx xxx" VerticalAlignment="Top" Height="42.84" Width="307.013" Grid.Column="1" Grid.RowSpan="2"/>
         <Button Content="Open Log Directory" HorizontalAlignment="Left" Margin="511.643,68.6,0,0" VerticalAlignment="Top" Width="138.2" Grid.Column="1" Height="19.24"/>
-        <Label Content="chip info" HorizontalAlignment="Left" Margin="-5.865,72.6,0,0" VerticalAlignment="Top" Height="30.04" Width="58.263"/>
-        <TextBlock HorizontalAlignment="Left" Margin="88.728,36.27,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="20.415" Width="148.793" Grid.Column="1" Grid.Row="1"><Run Text="all "/><Run Text="success"/><Run Text="(00:00:09)"/></TextBlock>
+        <Label Content="chip info" HorizontalAlignment="Left" Margin="-5.865,72.6,0,0" VerticalAlignment="Top" Height="30.04" Width="62.289" Grid.RowSpan="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="158.644,40.406,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="20.415" Width="148.793" Grid.Column="1" Grid.Row="2"><Run Text="all "/><Run Text="success"/><Run Text="(00:00:0"/><Run Text="20"/><Run Text=")"/></TextBlock>
         <TextBlock HorizontalAlignment="Left" Margin="0.424,55.24,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="353.6" Height="15.24" Grid.Column="1"><Run Text="e://axxx"/><Run Text="."/><Run Text="bl2"/></TextBlock>
-        <TextBlock HorizontalAlignment="Left" Margin="0,120.44,0,0" TextWrapping="Wrap" Text="xxx usb" VerticalAlignment="Top" Width="265.97" Height="15.24" Grid.Column="1"/>
-        <Button Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="468.828,2.83,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75.8" Height="44.44"/>
+        <TextBlock HorizontalAlignment="Left" Margin="19,10.44,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="265.97" Height="15.24" Grid.Row="1" Grid.ColumnSpan="2"><Run Text="xxx usb"/><Run Text=" active"/></TextBlock>
+        <Button Content="Start" Grid.Column="1" HorizontalAlignment="Left" Margin="459.828,8.153,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75.8" Height="44.44"/>
 
     </Grid>
 </Window>
